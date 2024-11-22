@@ -43,6 +43,11 @@ main:
     beq $t0, 8, delobject
     beq $t0, 0, exit
 
+invalid_option:
+    la $a0, error              # Mensaje de error
+    li $v0, 4
+    syscall
+    j main                     # Volver al menú
 
 exit:
     li $v0, 10
