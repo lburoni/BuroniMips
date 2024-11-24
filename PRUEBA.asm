@@ -44,7 +44,7 @@ main:
     beq $t0, 0, exit
 
 invalid_option:
-    la $a0, error              # Mensaje de error
+    la $a0, error              
     li $v0, 4
     syscall
     j main                     # Volver al menú
@@ -55,11 +55,11 @@ exit:
 
 # Nueva categoría
 newcategory:
-    li $v0, 9      # Solicitar memoria dinámica
+    li $v0, 9      # Solicito memoria dinámica
     li $a0, 16     # Tamaño para la categoría
     syscall
     move $t1, $v0  # Guardar puntero a la nueva categoría
-    beqz $t1, memory_error_  # Verificar error de asignación de memoria
+    beqz $t1, memory_error_  # Verifico error de asignación de memoria
 
     # Inicializar bloque de memoria a 0
     move $t2, $t1
@@ -75,7 +75,7 @@ init_loop:
     la $a0, cat_prompt         # Pedir nombre de la categoría
     li $v0, 4
     syscall
-    li $v0, 8                  # Leer cadena
+    li $v0, 8                  # Leer la cadena
     la $a0, 8($t1)             # Espacio para el nombre
     li $a1, 16                 # Tamaño máximo
     syscall
@@ -201,9 +201,6 @@ del_update:
     la $a0, success            # Mensaje de éxito
     li $v0, 4
     syscall
-
-    # Liberar memoria de la categoría
-    # Eliminar se realiza manualmente por diseño MIPS
     j main
 
 # Añadir objeto
@@ -235,8 +232,8 @@ print_addobject:
     syscall
 
 addobject_loop:
-    lw $t3, 12($t2)         # Leer el siguiente objeto (en offset 12)
-    beqz $t3, insert_object # Si el siguiente objeto es nulo, insertar el nuevo objeto
+    lw $t3, 12($t2)         # Leer el siguiente objeto
+    beqz $t3, insert_object # Si el siguiente objeto es nulo, inserta el nuevo objeto
     move $t2, $t3           # Avanzar al siguiente objeto
     j addobject_loop        # Volver al ciclo
 
@@ -247,7 +244,7 @@ insert_object:
 
 first_object:
     sw $t1, 16($t0)         # Nuevo objeto como primero
-    sw $zero, 4($t1)        # Sin anterior
+    sw $zero, 4($t1)        
 
 addobject_done:
     la $a0, success
@@ -301,7 +298,7 @@ delobject:
 
 delobject_loop:
     la $t2, 8($t1)             # Dirección nombre
-    li $v0, 42                 # strcmp
+    li $v0, 42                 
     syscall
     beqz $v0, delobject_found
     lw $t1, 12($t1)
@@ -324,7 +321,6 @@ delobject_first:
 
 reconnect_next:
     sw $t2, 4($t3)
-
     # Liberar memoria
     la $a0, success
     li $v0, 4
